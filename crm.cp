@@ -1,163 +1,583 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
 #include <fstream>
+
 using namespace std;
 
+class Contact {
+private:
+    string date;
+    string summary;
+public:
+    Contact(string d, string s) : date(d), summary(s) {}
 
-class REGISTRATION{
-	private:
-		
-		string user_name;
-		double user_cell_number;
-		string user_pass;
-		string gender;
-       
-		public:
-	   
-		string user_ID;
-		string confirm_pass;
+    string getDate() const {
+        return date;
+    }
 
-		void registration_info(){
-			
-			cout<<"\t\t\t----------------------------------------\n";
-       		cout<<"\t\t\t\tREGISTRATION   INFO   \n";
-       		cout<<"\t\t\t----------------------------------------\n\n";
+    string getSummary() const {
+        return summary;
+    }
 
-			cout<<"\t\t\tName = " ;
-			cin>>user_name;
-			
-			cout<<endl<<"\t\t\tID = " ;
-			cin>> user_ID;
-			
-			cout<<endl<<"\t\t\tPhone Number = " ;
-			cin>>user_cell_number;
-			
-			cout<<endl<<"\t\t\tGender (m/f) = " ;
-			cin>>gender;
-			
-			cout<<endl<<"\t\t\tNew Password = " ;
-			cin>>user_pass;
-			
-			cout<<endl<<"\t\t\tConfirm Password = ";
-			cin>>confirm_pass;
-			
-			
-			if(user_pass==confirm_pass){				 
-				cout<<"\n\n\t\t\tYOUR REGISTERATION HAS BEEN CONFIRMED!"<<endl;
-				cout<<"\t\t\t   THANKYOU FOR REGISTRATION"<<endl;
-			system("PAUSE");
-			}
-
-			else {
-				cout<<"\t\t\tINVALID PASSWORD RETRY!"<<endl;
-				registration_info();
-			system("PAUSE");	 				
-			}
-		}	
-		
+    void display() const {
+        cout << "Date: " << date << ", Summary: " << summary << endl;
+    }
 };
 
+class SalesOpportunity {
+private:
+    string description;
+    double value;
+    string stage;
+public:
+    SalesOpportunity(string desc, double val, string st) : description(desc), value(val), stage(st) {}
 
-class LOGIN_PAGE : public REGISTRATION{
-	private:
-		string 	user_password="maju";
-	public:
-		REGISTRATION b1; //association
-	    registration_info();
-	    
-	void login_info(){
-    
-   string ch ; 
-   cout <<"\n\n\n\n\t\t\t\t\t****  Car Rental System  ****";
-   cout <<" \n\t\t\t\t\t\t                          BY YAMAAN ULLAH KHAN FA23-BSCS-0162 ";
-   cout <<" \n\t\t\t\t\t\t                                BY ALISHBA IRFAN FA23-BSCS-0168   ";
-   cout<<"   \n\n\n\n\n\n\n\n\n\t\t\t\t\t\t ** LOGIN *** ";
-   cout << "\n\t\t\t\t\t\tEnter Password: ";
-   
-   cin>>ch ;
-   user_password = ch  ; 
-    if(user_password== "maju"){
-      cout << "\n\n\n\n\t\t\t\t\t  Access Granted! Welcome To Our System \n\n";
-      system("PAUSE");
-      system("CLS");
-}
-	else{
-      cout << "\n\n\n\n\t\t\t\t\tAccess Aborted...Please Try Again!!\n";
-      system("PAUSE");
-      system("CLS");
-      login_info();
-   }
-}
+    string getDescription() const {
+        return description;
+    }
+
+    double getValue() const {
+        return value;
+    }
+
+    void display() const {
+        cout << "Description: " << description << ", Value: " << value << ", Stage: " << stage << endl;
+    }
 };
 
+class Customer {
+private:
+    string name;
+    string contactInfo;
+    vector<Contact> contacts;
+    vector<SalesOpportunity> salesOpportunities;
+public:
+    Customer(string n, string info) : name(n), contactInfo(info) {}
 
+    string getName() const {
+        return name;
+    }
 
+    vector<Contact>& getContacts() {
+        return contacts;
+    }
 
+    const vector<SalesOpportunity>& getSalesOpportunities() const {
+        return salesOpportunities;
+    }
 
-int main(){
-	REGISTRATION r1;
-	LOGIN_PAGE l1;
+    void addContact(const Contact& contact) {
+        contacts.push_back(contact);
+    }
+
+    void addSalesOpportunity(const SalesOpportunity& opportunity) {
+        salesOpportunities.push_back(opportunity);
+    }
+
+    void display() const {
+    		cout << "Customer Name: " << name << ", Contact Info: " << contactInfo << endl;
+    }
+
+    void viewContactDetails() const {
+        cout << "\nContact Details for " << name << ":" << endl;
+        if(!contacts.empty()){
+		    for (size_t i = 0; i < contacts.size(); ++i) {
+		        contacts[i].display();
+		    }	
+		}else{
+			cout<<"No Contact Information Found!!!";
+		}
+        
+    }
+
+    void viewSalesOpportunityDetails() const {
+        cout << "\nSales Opportunity Details for " << name << ":" << endl;
+        if(!salesOpportunities.empty()){
+		    for (size_t i = 0; i < salesOpportunities.size(); ++i) {
+            salesOpportunities[i].display();
+        	}	
+		}else{
+			cout<<"No Sales Opportunities Found!!!";
+		}
+		
+    }
+
+    void deleteContact(size_t index) {
+        if (index >= 0 && index < contacts.size()) {
+            contacts.erase(contacts.begin() + index);
+            cout << "Contact deleted successfully." << endl;
+        } else {
+            cout << "Invalid contact index." << endl;
+        }
+    }
+
+    void deleteSalesOpportunity(size_t index) {
+        if (index >= 0 && index < salesOpportunities.size()) {
+            salesOpportunities.erase(salesOpportunities.begin() + index);
+            cout << "Sales opportunity deleted successfully." << endl;
+        } else {
+            cout << "Invalid sales opportunity index." << endl;
+        }
+    }
 	
+	void editContact(size_t index, const Contact& newContact) {
+        if (index >= 0 && index < contacts.size()) {
+            contacts[index] = newContact;
+            cout << "Contact edited successfully." << endl;
+        } else {
+            cout << "Invalid contact index." << endl;
+        }
+    }
 	
-	cout<<"\t\t\t||-----------------------------------------------------------||"<<endl;
-	cout<<"\t\t\t||-----------[WELCOME TO CAR RENTAL MANAGEMENT]--------------||"<<endl;
-	cout<<"\t\t\t||-----------------------------------------------------------||"<<endl;
-	cout<<"\t\t\tPRESS 1 FOR REGISTRATION  \t  PRESS 2 FOR LOGIN"<<endl;
-	int choice;
-	char select;
-    cout<<"\n\n\t\t\t\t\t\t ENTER = ";
-	cin>>choice;
-	system("CLS");
-	
-	
-	switch (choice){
-		case 1:
-			r1.registration_info();
-			system("CLS");
-				cout<<"\n\n\n\n\t\t\tPRESS y/Y TO CONTINUE OR PRESS  n/N TO CLOSE PROGRAM " ;
-				cout<<"\n\n\t\t\t\tENTER = ";
-				cin>>select;
-				system("PAUSE") ; 
-				system("CLS") ;
-				
-				if(select=='y' || select=='Y'){
-					l1.login_info();
-				}
-				
-				if(select=='n'||select=='N'){
-					cout<<"\t\t\tTHANK YOU! :) \n\n\t YOU ARE BEING REDIRECTED TO THE LOGIN PAGE.. "<<endl;
-						l1.login_info();
-				}
-				
-		case 2:
-			l1.login_info();
-			cout<<"\n\n\n\n\n\n\n\n\t\t\tENTER 1 FOR BOOKING CARS OR ANY NUMBER FOR LIST OF AVAILABLE CARS ";
-				cout<<"\n\n\n\t\t\t\t\tENTER = " ; 
-				cin>>choice;
-				system("PAUSE") ; 
-				system("CLS") ;
+	void editSalesOpportunity(size_t index, const SalesOpportunity& newOpportunity) {
+        if (index >= 0 && index < salesOpportunities.size()) {
+            salesOpportunities[index] = newOpportunity;
+            cout << "Sales opportunity edited successfully." << endl;
+        } else {
+            cout << "Invalid sales opportunity index." << endl;
+        }
+    }
+};
+
+void deleteCustomer(vector<Customer>& customers) {
+    if (customers.empty()) {
+        cout << "No customers to delete." << endl;
+        return;
+    }
+
+    cout << "Select a customer to delete:" << endl;
+    for (size_t i = 0; i < customers.size(); ++i) {
+        cout << i + 1 << ". " << customers[i].getName() << endl;
+    }
+
+    int choice;
+    cout << "Enter customer number to delete: ";
+    cin >> choice;
+    if (choice >= 1 && choice <= customers.size()) {
+        customers.erase(customers.begin() + choice - 1);
+        cout << "Customer deleted successfully." << endl;
+    } else {
+        cout << "Invalid customer number." << endl;
+    }
+}
+
+void deleteContact(Customer& customer) {
+    if (customer.getContacts().empty()) {
+        cout << "No contacts to delete for this customer." << endl;
+        return;
+    }
+
+    cout << "Select a contact to delete:" << endl;
+    for (size_t i = 0; i < customer.getContacts().size(); ++i) {
+        cout << i + 1 << ". " << customer.getContacts()[i].getDate() << ": " << customer.getContacts()[i].getSummary() << endl;
+    }
+
+    int choice;
+    cout << "Enter contact number to delete: ";
+    cin >> choice;
+    if (choice >= 1 && choice <= customer.getContacts().size()) {
+        customer.deleteContact(choice - 1);
+    } else {
+        cout << "Invalid contact number." << endl;
+    }
+}
+
+void deleteSalesOpportunity(Customer& customer) {
+    if (customer.getSalesOpportunities().empty()) {
+        cout << "No sales opportunities to delete for this customer." << endl;
+        return;
+    }
+
+    cout << "Select a sales opportunity to delete:" << endl;
+    for (size_t i = 0; i < customer.getSalesOpportunities().size(); ++i) {
+        cout << i + 1 << ". " << customer.getSalesOpportunities()[i].getDescription() << endl;
+    }
+
+    int choice;
+    cout << "Enter sales opportunity number to delete: ";
+    cin >> choice;
+    if (choice >= 1 && choice <= customer.getSalesOpportunities().size()) {
+        customer.deleteSalesOpportunity(choice - 1);
+    } else {
+        cout << "Invalid sales opportunity number." << endl;
+    }
+}
+
+void editCustomer(vector<Customer>& customers) {
+    cout << "Select a customer to edit:" << endl;
+    int index;
+    if(!customers.empty()){
+    	for (size_t i = 0; i < customers.size(); ++i) {
+	        cout << i + 1 << ". " << customers[i].getName() << endl;
+	    }	
+	}else{
+		cout<<"No Customer Found!!!";
+		return;
 	}
+	
+    cout << "Enter customer number: ";
+    cin >> index;
+    if (index >= 1 && index <= customers.size()) {
+        string newName, newContactInfo;
+        cout << "Enter new name: ";
+        cin.ignore();
+        getline(cin, newName);
+        cout << "Enter new contact information: ";
+        getline(cin, newContactInfo);
+        customers[index - 1] = Customer(newName, newContactInfo);
+        cout << "Customer edited successfully." << endl;
+    } else {
+        cout << "Invalid customer number." << endl;
+    }
 }
 
+void editContact(Customer& customer) {
+    cout << "Select a contact to edit:" << endl;
+    if(!customer.getContacts().empty()){
+	    for (size_t i = 0; i < customer.getContacts().size(); ++i) {
+	        cout << i + 1 << ". " << customer.getContacts()[i].getDate() << ": " << customer.getContacts()[i].getSummary() << endl;
+	    }
+	}else{
+		cout<<"No Contact Details Found!!!";
+		return;
+	}
+    int choice;
+    cout << "Enter contact number to edit: ";
+    cin >> choice;
+    
+    	if (choice >= 1 && choice <= customer.getContacts().size()) {
+	        string newDate, newSummary;
+	        cout << "Enter new date: ";
+	        cin.ignore();
+	        getline(cin, newDate);
+	        cout << "Enter new summary: ";
+	        getline(cin, newSummary);
+	        customer.editContact(choice - 1, Contact(newDate, newSummary));
+	    } else {
+	        cout << "Invalid contact number." << endl;
+	    }
+	
+	    
+}
 
+void editSalesOpportunity(Customer& customer) {
+    cout << "Select a sales opportunity to edit:" << endl;
+    if(!customer.getSalesOpportunities().empty()){
+	    for (size_t i = 0; i < customer.getSalesOpportunities().size(); ++i) {
+	        cout << i + 1 << ". " << customer.getSalesOpportunities()[i].getDescription() << endl;
+	    }
+	}else{
+		cout<<"No Sales Opportunity Found!!!";
+		return;
+	}
+    int choice;
+    cout << "Enter sales opportunity number to edit: ";
+    cin >> choice;
+    if (choice >= 1 && choice <= customer.getSalesOpportunities().size()) {
+        string newDescription, newStage;
+        double newValue;
+        cout << "Enter new description: ";
+        cin.ignore();
+        getline(cin, newDescription);
+        cout << "Enter new value: ";
+        cin >> newValue;
+        cout << "Enter new stage: ";
+        cin.ignore();
+        getline(cin, newStage);
+        customer.editSalesOpportunity(choice - 1, SalesOpportunity(newDescription, newValue, newStage));
+    } else {
+        cout << "Invalid sales opportunity number." << endl;
+    }
+}
 
+void generateCustomerReports(const vector<Customer>& customers) {
+    cout << "\nCustomer Reports:" << endl;
+    for (size_t i = 0; i < customers.size(); ++i) {
+        customers[i].display();
+        customers[i].viewContactDetails();
+        customers[i].viewSalesOpportunityDetails();
+        cout << endl;
+    }
+}
 
+void generateSalesReports(const vector<Customer>& customers) {
+    double totalSales = 0.0;
+    cout << "\nSales Reports:" << endl;
+    for (size_t i = 0; i < customers.size(); ++i) {
+        const vector<SalesOpportunity>& opportunities = customers[i].getSalesOpportunities();
+        for (size_t j = 0; j < opportunities.size(); ++j) {
+            totalSales += opportunities[j].getValue();
+        }
+    }
+    cout << "Total Sales: $" << fixed << setprecision(2) << totalSales << endl;
+}
 
+void generateActivityReports(const vector<Customer>& customers) {
+    cout << "\nActivity Reports:" << endl;
+    cout << "No activity data available." << endl;
+}
 
+void login(string& username, string& password) {
+    cout << "Enter username: ";
+    cin >> username;
+    cout << "Enter password: ";
+    cin >> password;
+}
 
+void displayMenu() {
+    cout << "\nMenu:" << endl;
+    cout << "1. Add Customer\n2. Add Contact\n3. Add Sales Opportunity\n";
+    cout << "4. View Customer Details\n5. View Contact Details\n6. View Sales Opportunity Details\n";
+    cout << "7. Generate Customer Reports\n8. Generate Sales Reports\n9. Generate Activity Reports\n";
+    cout << "10. Delete Customer\n11. Delete Contact\n12. Delete Sales Opportunity\n";
+    cout << "13. Edit Customer\n14. Edit Contact\n15. Edit Sales Opportunity\n16. Exit\n";
+}
 
+int main() {
+    string username, password;
+    login(username, password);
+    if (username != "admin" || password != "admin") {
+        cout << "Invalid username or password. Exiting..." << endl;
+        return 1;
+    }
 
+    vector<Customer> customers;
 
+    int choice;
+    do {
+        displayMenu();
+        cout << "Enter your choice: ";
+        cin >> choice;
 
+        switch (choice) {
+            case 1: {
+                string name, contactInfo;
+                cout << "Enter customer name: ";
+                cin.ignore();
+                getline(cin, name);
+                cout << "Enter contact information: ";
+                getline(cin, contactInfo);
+                customers.push_back(Customer(name, contactInfo));
+                break;
+            }
+           case 2: {
+			    // Select a customer to add a contact
+			    cout << "Select a customer to add a contact:" << endl;
+			    int index;
+			    if(!customers.empty()){
+				    for (size_t i = 0; i < customers.size(); ++i) {			    	
+						cout << i + 1 << ". " << customers[i].getName() << endl;
+				    }
+			    }else{
+			    	cout<<"No Customer Found Please Add Customer";
+						break;
+					}
+			    cout << "Enter customer number: ";
+			    cin >> index;
+			    if (index >= 1 && index <= customers.size()) {
+			        string date, summary;
+			        cout << "Enter contact date: ";
+			        cin.ignore();
+			        getline(cin, date);
+			        cout << "Enter contact summary: ";
+			        getline(cin, summary);
+			        customers[index - 1].addContact(Contact(date, summary));
+			        cout << "Contact added successfully." << endl;
+			    } else {
+			        cout << "Invalid customer number." << endl;
+			    }
+			    break;
+			}
+            case 3: {
+			    // Select a customer to add a sales opportunity
+			    cout << "Select a customer to add a sales opportunity:" << endl;
+			    int index;
+			    if(!customers.empty()){
+				    for (size_t i = 0; i < customers.size(); ++i) {
+				        cout << i + 1 << ". " << customers[i].getName() << endl;
+				    }
+				}else{
+					cout<<"No Customer Found Please Add Customer";
+					break;
+				}
+			    cout << "Enter customer number: ";
+			    cin >> index;
+			    if (index >= 1 && index <= customers.size()) {
+			        string description, stage;
+			        double value;
+			        cout << "Enter sales opportunity description: ";
+			        cin.ignore();
+			        getline(cin, description);
+			        cout << "Enter sales opportunity value: ";
+			        cin >> value;
+			        cout << "Enter sales opportunity stage: ";
+			        cin.ignore();
+			        getline(cin, stage);
+			        customers[index - 1].addSalesOpportunity(SalesOpportunity(description, value, stage));
+			        cout << "Sales opportunity added successfully." << endl;
+			    } else {
+			        cout << "Invalid customer number." << endl;
+			    }
+			    break;
+			}
 
+            case 4: {
+                cout << "\nCustomer Details:" << endl;
+                if(!customers.empty()){
+                	for (size_t i = 0; i < customers.size(); ++i) {
+	                    customers[i].display();
+	                }
+				}else{
+					cout<<"No Customer Found!!!";
+				}
+	                
+                break;
+            }
+            case 5: {
+            	cout << "Select a customer to view contact details:" << endl;
+				int index;
+            	if(!customers.empty()){
+            		
+				    for (size_t i = 0; i < customers.size(); ++i) {
+				        cout << i + 1 << ". " << customers[i].getName() << endl;
+				    }
+				}else{
+					cout<<"No Customer Found!!!";
+					break;
+				}
+				    
+			    cout << "Enter customer number: ";
+			    cin >> index;
+			    if (index >= 1 && index <= customers.size()) {
+			        customers[index - 1].viewContactDetails();
+			    } else {
+			        cout << "Invalid customer number." << endl;
+			    }
+			    break;
+			}
 
+            case 6: {
+			    // Select a customer to view sales opportunity details
+			    cout << "Select a customer to view sales opportunity details:" << endl;
+			    int index;
+			    if(!customers.empty()){
+				    for (size_t i = 0; i < customers.size(); ++i) {
+				        cout << i + 1 << ". " << customers[i].getName() << endl;
+				    }
+				}else{
+					cout<<"No Customer Found!!!";
+					break;
+				}
+			    cout << "Enter customer number: ";
+			    cin >> index;
+			    if (index >= 1 && index <= customers.size()) {
+			        customers[index - 1].viewSalesOpportunityDetails();
+			    } else {
+			        cout << "Invalid customer number." << endl;
+			    }
+			    break;
+			}
 
+            case 7: {
+                generateCustomerReports(customers);
+                break;
+            }
+            case 8: {
+                generateSalesReports(customers);
+                break;
+            }
+            case 9: {
+                generateActivityReports(customers);
+                break;
+            }
+            case 10: {
+                deleteCustomer(customers);
+                break;
+            }
+            case 11: {
+                cout << "Select a customer to delete contact:" << endl;
+                int index;
+                for (size_t i = 0; i < customers.size(); ++i) {
+                    cout << i + 1 << ". " << customers[i].getName() << endl;
+                }
+                cout << "Enter customer number: ";
+                cin >> index;
+                if (index >= 1 && index <= customers.size()) {
+                    deleteContact(customers[index - 1]);
+                } else {
+                    cout << "Invalid customer number." << endl;
+                }
+                break;
+            }
+            case 12: {
+                cout << "Select a customer to delete sales opportunity:" << endl;
+                int index;
+                for (size_t i = 0; i < customers.size(); ++i) {
+                    cout << i + 1 << ". " << customers[i].getName() << endl;
+                }
+                cout << "Enter customer number: ";
+                cin >> index;
+                if (index >= 1 && index <= customers.size()) {
+                    deleteSalesOpportunity(customers[index - 1]);
+                } else {
+                    cout << "Invalid customer number." << endl;
+                }
+                break;
+            }
+            case 13: {
+                editCustomer(customers);
+                break;
+            }case 14: {
+                cout << "Select a customer to edit contact:" << endl;
+                int index;
+				if(!customers.empty()){
+					for (size_t i = 0; i < customers.size(); ++i) {
+	                    cout << i + 1 << ". " << customers[i].getName() << endl;
+	                }
+				}else{
+					cout<<"No Customer Found!!!";
+					break;
+				}
+	                
+                cout << "Enter customer number: ";
+                cin >> index;
+                if (index >= 1 && index <= customers.size()) {
+                    editContact(customers[index - 1]);
+                } else {
+                    cout << "Invalid customer number." << endl;
+                }
+                break;
+            }
+            case 15: {
+                cout << "Select a customer to edit sales opportunity:" << endl;
+                int index;
+                if(!customers.empty()){
+	                for (size_t i = 0; i < customers.size(); ++i) {
+	                    cout << i + 1 << ". " << customers[i].getName() << endl;
+	                }
+                }else{
+					cout<<"No Customer Found!!!";
+					break;
+				}
+                cout << "Enter customer number: ";
+                cin >> index;
+                if (index >= 1 && index <= customers.size()) {
+                    editSalesOpportunity(customers[index - 1]);
+                } else {
+                    cout << "Invalid customer number." << endl;
+                }
+                break;
+            }
+            case 16: {
+                cout << "Exiting..." << endl;
+                break;
+            }
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 16);
 
-
-
-
-
-
-
-
-
-
+    return 0;
+}
