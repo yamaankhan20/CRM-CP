@@ -1,17 +1,22 @@
 #include <iostream>
-#include <vector>
+#include <vector> 
 #include <string>
-#include <iomanip>
+#include <iomanip> 
 #include <fstream>
 
 using namespace std;
+
+void generateCustomerReports(const vector<Customer>& customers);
 
 class Contact {
 private:
     string date;
     string summary;
 public:
-    Contact(string d, string s) : date(d), summary(s) {}
+    Contact(string d, string s) {
+		date = d;
+		summary = s;
+	}
 
     string getDate() const {
         return date;
@@ -32,7 +37,12 @@ private:
     double value;
     string stage;
 public:
-    SalesOpportunity(string desc, double val, string st) : description(desc), value(val), stage(st) {}
+    SalesOpportunity(string desc, double val, string st){
+		description = desc;
+		value = val;
+		stage = st;
+		
+	}
 
     string getDescription() const {
         return description;
@@ -53,8 +63,13 @@ private:
     string contactInfo;
     vector<Contact> contacts;
     vector<SalesOpportunity> salesOpportunities;
+    
+    friend void generateCustomerReports(const vector<Customer>& customers);
 public:
-    Customer(string n, string info) : name(n), contactInfo(info) {}
+    Customer(string n, string info){
+		name = n;
+		contactInfo = info;
+	}
 
     string getName() const {
         return name;
@@ -292,14 +307,16 @@ void editSalesOpportunity(Customer& customer) {
     }
 }
 
+
+// apko is pr kaam krna hai ab file handling wala
 void generateCustomerReports(const vector<Customer>& customers) {
     cout << "\nCustomer Reports:" << endl;
-    for (size_t i = 0; i < customers.size(); ++i) {
+    for (size_t i = 0; i < customers.size(); ++i) { //size vector ka builtin function hai ok
         customers[i].display();
         customers[i].viewContactDetails();
         customers[i].viewSalesOpportunityDetails();
         cout << endl;
-    }
+    } // is jga tm file handle or data insert karo gi file mai same goes to nichy wali filyyyyy sory fucntionsss do jo hain sirf ok ab bndh krdo ya jo smjh nhi aya vo pucholoooo 
 }
 
 void generateSalesReports(const vector<Customer>& customers) {
@@ -319,15 +336,29 @@ void generateActivityReports(const vector<Customer>& customers) {
     cout << "No activity data available." << endl;
 }
 
+// in teen fucntions pr jismy sy ( generateCustomerReports) ka friend fucntion bny ga customer ki class mai or sales ka sale ki class mai or contact ka contact ki class ab ye 
+
+
 void login(string& username, string& password) {
-    cout << "Enter username: ";
+	cout<<"--------------------------------------------------------------------"<<endl;
+	cout<<"------------------CRM (Client Relation Managemnet)------------------"<<endl;
+    cout<<"--------------------------------------------------------------------"<<endl;
+    cout<<"\t\t\t\tMEMBERS:"<<endl;
+    cout<<"\t\tNAME:YAMAAN ULLAH KHAN - FA23-BSCS-0162"<<endl;
+    cout<<"\t\t  NAME:ALISHBA IRFAN - FA23-BSCS-0168"<<endl;
+	cout<<"--------------------------------------------------------------------"<<endl;
+    
+	cout << "Enter username: ";
     cin >> username;
     cout << "Enter password: ";
     cin >> password;
 }
 
 void displayMenu() {
-    cout << "\nMenu:" << endl;
+	cout<<""<<endl;
+	cout<<"--------------------------------------------------------------------"<<endl;
+    cout << "--------------------------------Menu:-------------------------------" << endl;
+    cout<<"--------------------------------------------------------------------"<<endl;
     cout << "1. Add Customer\n2. Add Contact\n3. Add Sales Opportunity\n";
     cout << "4. View Customer Details\n5. View Contact Details\n6. View Sales Opportunity Details\n";
     cout << "7. Generate Customer Reports\n8. Generate Sales Reports\n9. Generate Activity Reports\n";
@@ -341,7 +372,9 @@ int main() {
     if (username != "admin" || password != "admin") {
         cout << "Invalid username or password. Exiting..." << endl;
         return 1;
-    }
+    }else{
+    	cout<<"\n-Account Logged in Successfully!!!"<<endl;
+	}
 
     vector<Customer> customers;
 
@@ -354,7 +387,8 @@ int main() {
         switch (choice) {
             case 1: {
                 string name, contactInfo;
-                cout << "Enter customer name: ";
+                cout<<"--------------------------------------------------------------------"<<endl;
+				cout<<"Enter customer name:";
                 cin.ignore();
                 getline(cin, name);
                 cout << "Enter contact information: ";
@@ -363,7 +397,6 @@ int main() {
                 break;
             }
            case 2: {
-			    // Select a customer to add a contact
 			    cout << "Select a customer to add a contact:" << endl;
 			    int index;
 			    if(!customers.empty()){
@@ -391,7 +424,6 @@ int main() {
 			    break;
 			}
             case 3: {
-			    // Select a customer to add a sales opportunity
 			    cout << "Select a customer to add a sales opportunity:" << endl;
 			    int index;
 			    if(!customers.empty()){
@@ -459,7 +491,6 @@ int main() {
 			}
 
             case 6: {
-			    // Select a customer to view sales opportunity details
 			    cout << "Select a customer to view sales opportunity details:" << endl;
 			    int index;
 			    if(!customers.empty()){
